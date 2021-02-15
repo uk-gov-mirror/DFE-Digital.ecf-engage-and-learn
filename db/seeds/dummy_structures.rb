@@ -35,6 +35,6 @@ if Rails.env.development? || Rails.env.deployed_development?
       u.full_name = "ECT User"
       u.confirmed_at = Time.zone.now.utc
     end
-    EarlyCareerTeacherProfile.create!(user: user, cohort: Cohort.first, core_induction_programme: CoreInductionProgramme.first, mentor: MentorProfile.first)
+    EarlyCareerTeacherProfile.create!(user: user, cohort: Cohort.first, core_induction_programme: CoreInductionProgramme.first, mentor_profile: MentorProfile.first)
   end
 end
