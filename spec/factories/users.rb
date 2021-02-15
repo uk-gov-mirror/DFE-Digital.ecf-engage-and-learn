@@ -19,5 +19,9 @@ FactoryBot.define do
     trait :early_career_teacher do
       early_career_teacher_profile
     end
+
+    trait :mentor do
+      mentor_profile
+    end
   end
 end
