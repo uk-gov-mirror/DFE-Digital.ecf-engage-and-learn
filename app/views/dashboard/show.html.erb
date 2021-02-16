@@ -2,15 +2,23 @@
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">User dashboard</h1>
     <p class="govuk-body"> You are logged in</p>
-
     <% if @current_user.early_career_teacher? %>
       <h2 class="govuk-heading-l">Your Core Induction Programme</h2>
-      <% if @current_user.course_years.each do |course_year| %>
+      <% @current_user.course_years.each do |course_year| %>
         <p><%= govuk_link_to course_year.title, cip_year_url(course_year) %></p>
-      <% end.empty? %>
+      <% end %>
+      <% if @current_user.course_years.empty? %>
         <p>You have not been enrolled in Core Induction Programme yet!</p>
       <% end %>
     <% end %>
-
+    <%if @current_user.mentor? %>
+      <h2 class="govuk-heading-l">Your list of mentees</h2>
+      <% @current_user.mentor_profile.early_career_teachers.each do |early_career_teacher| %>
+        <p><%= early_career_teacher.full_name %></p>
+      <% end %>
+      <% if @current_user.mentor_profile.early_career_teachers.empty? %>
+        <p>You have no mentees</p>
+      <% end %>
+    <% end %>
   </div>
 </div>
