@@ -7,9 +7,30 @@ class CoreInductionProgrammes::ModulesController < ApplicationController
 
   after_action :verify_authorized
   before_action :authenticate_user!, except: :show
-  before_action :load_course_module
+  before_action :load_course_module, except: %i[new create]
 
   def show; end
+
+  def new
+    authorize CourseModule
+    @course_module = CourseModule.new
+    @course_years = CourseYear.where(core_induction_programme_id: params[:cip_id])
+  end
+
+  def create
+    authorize CourseModule
+    @course_module = CourseModule.new(
+      course_module_params.merge(course_year: find_course_year, previous_module: find_previous_module.last),
+    )
+
+    if @course_module.valid?
+      @course_module.save!
+      redirect_to cip_index_path
+    else
+      @course_years = CourseYear.all
+      render action: "new"
+    end
+  end
 
   def edit; end
 
@@ -33,6 +54,14 @@ private
   end
 
   def course_module_params
-    params.require(:course_module).permit(:content, :title, :term)
+    params.require(:course_module).permit(:content, :title, :term, :course_year_id)
+  end
+
+  def find_course_year
+    CourseYear.find_by(id: params[:course_module][:course_year])
+  end
+
+  def find_previous_module
+    CourseModule.where(course_year_id: find_course_year)
   end
 end
