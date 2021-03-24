@@ -5,11 +5,11 @@
     <%= form_with model:@course_module, url: year_module_path, method: :put do |f| %>
       <%= f.govuk_text_field :title, label: { text: "Module title" } %>
       <%= f.govuk_collection_select(
-            :course_year_id,
-            @course_years.core_induction_programme,
+            :course_year,
+            @course_module.course_year.core_induction_programme.course_years,
             :id,
-            :full_title,
-            label: { text: "Which year would you like to add a module to for?" , class: "govuk-heading-m" },
+            :title,
+            label: { text: "Which year would you like to add a module to for?", class: "govuk-heading-m" },
             hint: { text: "Course Years are listed in order" }
           ) %>
       <%= f.govuk_collection_radio_buttons(
