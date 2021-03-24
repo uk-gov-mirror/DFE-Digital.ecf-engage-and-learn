@@ -1,0 +1,29 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Create an additional course module</h1>
+    <%= form_with model: @course_module, url: cip_create_module_path, method: :post do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_collection_select(
+            :course_year,
+            @course_years,
+            :id,
+            :full_title,
+            label: { text: "Which year would you like to add a module to for?" , class: "govuk-heading-m" },
+            hint: { text: "Course Years are listed in order" }
+          ) %>
+      <%= f.govuk_text_field :title, label: { text: 'Course module title' } %>
+      <%= f.govuk_text_area(
+            :content,
+            label: { text: 'Course module content' },
+            rows: 10
+          ) %>
+      <%= f.govuk_collection_radio_buttons(
+            :term,
+            CourseModule.term_options,
+            :id,
+            :name,
+            legend: { text: "Module term", class: "govuk-label"}) %>
+      <%= f.govuk_submit "Save" %>
+    <% end %>
+  </div>
+</div>

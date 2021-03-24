@@ -4,6 +4,14 @@
     <h1 class="govuk-heading-l">Content change preview</h1>
     <%= form_with model:@course_module, url: year_module_path, method: :put do |f| %>
       <%= f.govuk_text_field :title, label: { text: "Module title" } %>
+      <%= f.govuk_collection_select(
+            :course_year_id,
+            @course_years.core_induction_programme,
+            :id,
+            :full_title,
+            label: { text: "Which year would you like to add a module to for?" , class: "govuk-heading-m" },
+            hint: { text: "Course Years are listed in order" }
+          ) %>
       <%= f.govuk_collection_radio_buttons(
             :term,
             CourseModule.term_options,
