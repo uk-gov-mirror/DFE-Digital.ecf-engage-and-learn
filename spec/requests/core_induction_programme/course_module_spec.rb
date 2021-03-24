@@ -12,6 +12,26 @@ RSpec.describe "Core Induction Programme Module", type: :request do
       sign_in admin_user
     end
 
+    describe "GET /create-module" do
+      it "renders the create-module page" do
+        get "/core-induction-programmes/#{course_module.course_year[:id]}/create-module"
+        expect(response).to render_template(:new)
+      end
+    end
+
+    describe "POST /create-module" do
+      it "creates a new module and redirects" do
+        expect(create_course_module).to redirect_to("/core-induction-programmes")
+      end
+
+      it "creates a new module that is then displayed in the list of course module" do
+        create_course_module
+        get cip_url(course_module.course_year.core_induction_programme[:id], course_module[:id])
+        expect(response.body).to include("Additional module title")
+        expect(response.body).to include("Additional module content")
+      end
+    end
+
     describe "GET /years/:years_id/modules/module_id" do
       it "renders the cip module page" do
         get course_module_url
@@ -65,8 +85,20 @@ RSpec.describe "Core Induction Programme Module", type: :request do
     end
 
     describe "GET /years/:years_id/modules/module_id/edit" do
-      it "redirects to the sign in page" do
+      it "raises an authorization error" do
         expect { get "#{course_module_url}/edit" }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
+    describe "GET /create-module" do
+      it "raises an authorization error" do
+        expect { get "/core-induction-programmes/#{course_module.course_year[:id]}/create-module" }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
+    describe "POST /create-module" do
+      it "raises an authorization error" do
+        expect { create_course_module }.to raise_error Pundit::NotAuthorizedError
       end
     end
   end
@@ -92,5 +124,28 @@ RSpec.describe "Core Induction Programme Module", type: :request do
         expect(response).to redirect_to("/users/sign_in")
       end
     end
+
+    describe "GET /create-module" do
+      it "redirects to the sign in page" do
+        get "/core-induction-programmes/#{course_module.course_year[:id]}/create-module"
+        expect(response).to redirect_to("/users/sign_in")
+      end
+    end
+
+    describe "POST /create-module" do
+      it "redirects to the sign in page" do
+        create_course_module
+        expect(response).to redirect_to("/users/sign_in")
+      end
+    end
   end
+end
+
+def create_course_module
+  post "/core-induction-programmes/#{course_module.course_year[:id]}/create-module", params: { course_module: {
+    course_year: course_module.course_year[:id],
+    title: "Additional module title",
+    content: "Additional module content",
+    term: "spring",
+  } }
 end
