@@ -5,16 +5,16 @@ require "rails_helper"
 RSpec.describe "Core Induction Programme Module", type: :request do
   let(:course_module) { FactoryBot.create(:course_module) }
   let(:course_module_url) { "/years/#{course_module.course_year.id}/modules/#{course_module.id}" }
+  let(:second_course_module) { FactoryBot.create(:course_module, title: "Second module title", previous_module: course_module) }
 
   describe "when an admin user is logged in" do
     before do
       admin_user = create(:user, :admin)
       sign_in admin_user
     end
-
     describe "GET /create-module" do
       it "renders the create-module page" do
-        get "/core-induction-programmes/#{course_module.course_year[:id]}/create-module"
+        get "/core-induction-programmes/#{course_module.course_year.core_induction_programme[:id]}/create-module"
         expect(response).to render_template(:new)
       end
     end
@@ -29,6 +29,15 @@ RSpec.describe "Core Induction Programme Module", type: :request do
         get cip_url(course_module.course_year.core_induction_programme[:id], course_module[:id])
         expect(response.body).to include("Additional module title")
         expect(response.body).to include("Additional module content")
+      end
+
+      it "assigns a module to the previous module record" do
+        create_course_module
+        third_course_module = CourseModule.find_by(title: "Additional module title")
+        second_course_module.reload
+
+        expect(third_course_module[:previous_module_id]).to eq(course_module[:id])
+        expect(second_course_module[:previous_module_id]).to eql(third_course_module[:id])
       end
     end
 
@@ -142,10 +151,12 @@ RSpec.describe "Core Induction Programme Module", type: :request do
 end
 
 def create_course_module
-  post "/core-induction-programmes/#{course_module.course_year[:id]}/create-module", params: { course_module: {
-    course_year: course_module.course_year[:id],
-    title: "Additional module title",
-    content: "Additional module content",
-    term: "spring",
-  } }
+  post "/core-induction-programmes/#{course_module.course_year.core_induction_programme[:id]}/create-module",
+       params: { course_module: {
+         course_year: course_module.course_year[:id],
+         title: "Additional module title",
+         content: "Additional module content",
+         term: "spring",
+         previous_module_id: second_course_module[:id],
+       } }
 end
