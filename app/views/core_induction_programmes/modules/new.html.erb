@@ -11,6 +11,14 @@
             label: { text: "Which year would you like to add a module to for?" , class: "govuk-heading-m" },
             hint: { text: "Course Years are listed in order" }
           ) %>
+      <%= f.govuk_collection_select(
+            :previous_module_id,
+            @course_modules,
+            :id,
+            :term_and_title,
+            label: { text: "Where would you like the module to be placed?" , class: "govuk-heading-m" },
+            hint: { text: "The module you are creating will precede the module you are selecting" }
+          ) %>
       <%= f.govuk_text_field :title, label: { text: 'Course module title' } %>
       <%= f.govuk_text_area(
             :content,
