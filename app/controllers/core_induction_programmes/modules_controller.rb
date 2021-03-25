@@ -15,19 +15,25 @@ class CoreInductionProgrammes::ModulesController < ApplicationController
     authorize CourseModule
     @course_module = CourseModule.new
     @course_years = CourseYear.where(core_induction_programme_id: params[:cip_id])
+    @course_modules = CourseModule.where(course_year_id: @course_years.first[:id])
   end
 
   def create
     authorize CourseModule
     @course_module = CourseModule.new(
-      course_module_params.merge(course_year: find_course_year, previous_module: find_previous_module.last),
+      course_module_params.merge(
+        course_year: find_course_year,
+        previous_module_id: set_previous_module(params[:course_module][:previous_module_id]),
+      ),
     )
 
     if @course_module.valid?
       @course_module.save!
+      replace_previous_module_reference(@course_module)
       redirect_to cip_index_path
     else
-      @course_years = CourseYear.all
+      @course_years = CourseYear.where(core_induction_programme_id: params[:cip_id])
+      @course_modules = CourseModule.where(course_year_id: @course_years.first[:id])
       render action: "new"
     end
   end
@@ -61,7 +67,11 @@ private
     CourseYear.find_by(id: params[:course_module][:course_year])
   end
 
-  def find_previous_module
-    CourseModule.where(course_year_id: find_course_year)
+  def set_previous_module(previous_module)
+    CourseModule.where(id: previous_module).pick(:previous_module_id)
+  end
+
+  def replace_previous_module_reference(new_course_module)
+    CourseModule.where(id: params[:course_module][:previous_module_id]).update(previous_module: new_course_module)
   end
 end
