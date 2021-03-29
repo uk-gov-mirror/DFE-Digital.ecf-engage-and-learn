@@ -21,23 +21,41 @@ RSpec.describe "Core Induction Programme Module", type: :request do
 
     describe "POST /create-module" do
       it "creates a new module and redirects" do
-        expect(create_course_module).to redirect_to("/core-induction-programmes")
+        course_module.next_module = second_course_module
+        expect(create_course_module(course_module[:id])).to redirect_to("/core-induction-programmes")
       end
 
       it "creates a new module that is then displayed in the list of course module" do
-        create_course_module
+        course_module.next_module = second_course_module
+        create_course_module(course_module[:id])
         get cip_url(course_module.course_year.core_induction_programme[:id], course_module[:id])
         expect(response.body).to include("Additional module title")
         expect(response.body).to include("Additional module content")
       end
 
       it "assigns a module to the previous module record" do
-        create_course_module
+        course_module.next_module = second_course_module
+        create_course_module(course_module[:id])
+
         third_course_module = CourseModule.find_by(title: "Additional module title")
         second_course_module.reload
 
         expect(third_course_module[:previous_module_id]).to eq(course_module[:id])
-        expect(second_course_module[:previous_module_id]).to eql(third_course_module[:id])
+        expect(second_course_module[:previous_module_id]).to eq(third_course_module[:id])
+      end
+
+      it "assigns nil to the new module if it's selected to be first in the list" do
+        create_course_module("")
+        third_course_module = CourseModule.find_by(title: "Additional module title")
+        course_module.reload
+        expect(third_course_module[:previous_module_id]).to eq(nil)
+        expect(course_module[:previous_module_id]).to eq(third_course_module[:id])
+      end
+
+      it "assigns assigns a new module to the end of the module list" do
+        create_course_module(second_course_module[:id])
+        third_course_module = CourseModule.find_by(title: "Additional module title")
+        expect(third_course_module[:previous_module_id]).to eq(second_course_module[:id])
       end
     end
 
@@ -107,7 +125,7 @@ RSpec.describe "Core Induction Programme Module", type: :request do
 
     describe "POST /create-module" do
       it "raises an authorization error" do
-        expect { create_course_module }.to raise_error Pundit::NotAuthorizedError
+        expect { create_course_module(course_module[:id]) }.to raise_error Pundit::NotAuthorizedError
       end
     end
   end
@@ -143,20 +161,20 @@ RSpec.describe "Core Induction Programme Module", type: :request do
 
     describe "POST /create-module" do
       it "redirects to the sign in page" do
-        create_course_module
+        create_course_module(course_module[:id])
         expect(response).to redirect_to("/users/sign_in")
       end
     end
   end
 end
 
-def create_course_module
+def create_course_module(course_module_id)
   post "/core-induction-programmes/#{course_module.course_year.core_induction_programme[:id]}/create-module",
        params: { course_module: {
-         course_year: course_module.course_year[:id],
+         course_year_id: course_module.course_year[:id],
          title: "Additional module title",
          content: "Additional module content",
          term: "spring",
-         previous_module_id: second_course_module[:id],
+         previous_module_id: course_module_id,
        } }
 end

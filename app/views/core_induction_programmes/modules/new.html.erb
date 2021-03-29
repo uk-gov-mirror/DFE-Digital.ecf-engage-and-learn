@@ -4,11 +4,11 @@
     <%= form_with model: @course_module, url: cip_create_module_path, method: :post do |f| %>
       <%= f.govuk_error_summary %>
       <%= f.govuk_collection_select(
-            :course_year,
+            :course_year_id,
             @course_years,
             :id,
             :title,
-            label: { text: "Which year would you like to add a module to for?" , class: "govuk-heading-m" },
+            label: { text: "Which year would you like to assign the module to?" , class: "govuk-heading-m" },
             hint: { text: "Course Years are listed in order" }
           ) %>
       <%= f.govuk_collection_select(
@@ -17,7 +17,8 @@
             :id,
             :term_and_title,
             label: { text: "Where would you like the module to be placed?" , class: "govuk-heading-m" },
-            hint: { text: "The module you are creating will precede the module you are selecting" }
+            hint: { text: "The module you are selecting will precede the module you are creating" },
+            options: { include_blank: true }
           ) %>
       <%= f.govuk_text_field :title, label: { text: 'Course module title' } %>
       <%= f.govuk_text_area(
