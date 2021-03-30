@@ -90,10 +90,28 @@ RSpec.describe "Core Induction Programme Module", type: :request do
       end
 
       it "redirects to the module page when saving title" do
-        put course_module_url, params: { commit: "Save changes", course_module: { title: "New title" } }
+        put course_module_url, params: { commit: "Save changes", course_module: { title: "New title", previous_module_id: "" } }
         expect(response).to redirect_to(course_module_url)
         get course_module_url
         expect(response.body).to include("New title")
+      end
+
+      it "reassigns an existing modules previous module id when moved" do
+        third_course_module = FactoryBot.create(:course_module, title: "third module title", previous_module: second_course_module)
+        put course_module_url, params: { commit: "Save changes", course_module: { previous_module_id: third_course_module[:id] } }
+        course_module.reload
+        expect(course_module[:previous_module_id]).to eql(third_course_module[:id])
+      end
+
+      it "assigns nil to an existing module when a module is moved from first in the list" do
+        third_course_module = FactoryBot.create(:course_module, title: "third module title", previous_module: second_course_module)
+
+        put "/years/#{course_module.course_year.id}/modules/#{course_module.id}",
+            params: { commit: "Save changes", course_module: { previous_module_id: third_course_module[:id], course_year_id: course_module.course_year[:id] } }
+        course_module.reload
+        second_course_module.reload
+        expect(second_course_module[:previous_module_id]).to eq(nil)
+        expect(course_module[:previous_module_id]).to eq(third_course_module[:id])
       end
     end
   end
