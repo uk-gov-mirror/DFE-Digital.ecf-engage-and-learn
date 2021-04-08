@@ -4,7 +4,14 @@ class Users::SessionsController < Devise::SessionsController
   class EmailNotFoundError < StandardError; end
   class LoginIncompleteError < StandardError; end
 
-  TEST_USERS = %w[admin@example.com early-career-teacher@example.com mentor@example.com].freeze
+  TEST_USERS = %w[
+    admin@example.com
+    early-career-teacher-1@example.com
+    early-career-teacher-2@example.com
+    early-career-teacher-3@example.com
+    early-career-teacher-4@example.com
+    mentor@example.com
+  ].freeze
 
   before_action :mock_login, only: :create, unless: -> { Rails.env.production? }
   before_action :redirect_to_dashboard, only: %i[sign_in_with_token redirect_from_magic_link]
@@ -54,5 +61,9 @@ private
     user = User.find_by_email(email)
     sign_in(user, scope: :user)
     redirect_to dashboard_url
+  end
+
+  def after_sign_out_path_for(_resource_or_scope)
+    new_user_session_url
   end
 end

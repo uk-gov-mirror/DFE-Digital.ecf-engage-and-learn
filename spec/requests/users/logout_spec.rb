@@ -17,7 +17,7 @@ RSpec.describe "Users::Sessions", type: :request do
 
       get "/users/sign_out"
 
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(new_user_session_url)
       expect(controller.current_user).to be_nil
       expect(flash[:notice]).to eq "Signed out successfully."
     end
