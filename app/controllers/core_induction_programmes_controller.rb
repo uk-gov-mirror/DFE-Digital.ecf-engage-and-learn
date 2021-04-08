@@ -5,6 +5,7 @@ class CoreInductionProgrammesController < ApplicationController
   include CipBreadcrumbHelper
 
   def index
+    authorize CoreInductionProgramme
     @core_induction_programmes = CoreInductionProgramme.all
   end
 
@@ -25,5 +26,5 @@ class CoreInductionProgrammesController < ApplicationController
     else
       redirect_to cip_index_path
     end
-end
+  end
 end
