@@ -10,6 +10,7 @@ class CoreInductionProgrammesController < ApplicationController
 
   def show
     @core_induction_programme = CoreInductionProgramme.find(params[:id])
+    authorize @core_induction_programme
   end
 
   def download_export
@@ -24,5 +25,5 @@ class CoreInductionProgrammesController < ApplicationController
     else
       redirect_to cip_index_path
     end
-  end
+end
 end
