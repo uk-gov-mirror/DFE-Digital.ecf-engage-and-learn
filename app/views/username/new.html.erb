@@ -9,7 +9,7 @@
 
     <%= form_with model: current_user, method: :post, url: username_path do |f| %>
       <%= f.govuk_text_field :username, label: { text: "Username" }, width: "two-thirds" %>
-      <%= f.govuk_submit "Save" %>
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>
