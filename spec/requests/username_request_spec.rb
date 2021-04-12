@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Usernames", type: :request do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, account_created: false) }
 
   before do
     sign_in user
