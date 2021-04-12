@@ -38,8 +38,8 @@ const login = (traits, args) => {
   cy.appFactories([factoryArgs])
     .as("userData")
     .then(([user]) => {
-      cy.visit('/users/sign_in');
-      cy.get('[name*=email]').type(`${user.email}{enter}`);
+      cy.visit("/users/sign_in");
+      cy.get("[name*=email]").type(`${user.email}{enter}`);
     });
 };
 
