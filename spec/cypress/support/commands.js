@@ -3,8 +3,8 @@ Cypress.Commands.add("login", (...traits) => {
   cy.appFactories([["create", "user", ...traits]])
     .as("userData")
     .then(([user]) => {
-      cy.visit('/users/sign_in');
-      cy.get('[name*=email]').type(`${user.email}{enter}`);
+      cy.visit("/users/sign_in");
+      cy.get("[name*=email]").type(`${user.email}{enter}`);
     });
 });
 
