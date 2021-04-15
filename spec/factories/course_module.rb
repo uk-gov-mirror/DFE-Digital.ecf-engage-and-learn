@@ -8,7 +8,7 @@ FactoryBot.define do
 
     trait :with_previous do
       after :build do |course_module|
-        course_module.previous_module = FactoryBot.create(:course_module, course_year: course_module.year, title: "Test previous module")
+        course_module.previous_module = FactoryBot.create(:course_module, course_year: course_module.course_year, title: "Test previous module")
       end
     end
   end
