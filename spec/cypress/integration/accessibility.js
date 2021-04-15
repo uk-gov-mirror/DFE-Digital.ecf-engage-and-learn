@@ -25,7 +25,7 @@ describe("Accessibility", () => {
         cy.get('[name="user[email]"]').type(user.email);
       });
 
-    cy.get('[name="commit"]').contains("Sign in").click();
+    cy.clickCommitButton();
 
     cy.get("@userData").then(([user]) => {
       cy.get("h1").should("contain", `Welcome ${user.full_name}`);

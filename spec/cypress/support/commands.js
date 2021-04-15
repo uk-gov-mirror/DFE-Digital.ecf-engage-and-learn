@@ -32,3 +32,7 @@ Cypress.Commands.add("visitModuleOfLesson", (courseLesson) => {
     cy.get("h1").should("contain", courseModule.title);
   });
 });
+
+Cypress.Commands.add("clickCommitButton", () => {
+  cy.get("[name=commit]").click();
+});
