@@ -18,14 +18,18 @@ expect(parseArgs('a "a b", b "b" and c "d"')).to.deep.equal({
   c: "d",
 });
 
-Given("{word} was created as {string} with {}", (factory, traits, args) => {
-  cy.appFactories([
-    ["create", factory, ...traits.split(", "), parseArgs(args)],
-  ]);
+Given("{word} was created", (factory) => {
+  cy.appFactories([["create", factory]]);
 });
 
 Given("{word} was created with {}", (factory, args) => {
   cy.appFactories([["create", factory, parseArgs(args)]]);
+});
+
+Given("{word} was created as {string} with {}", (factory, traits, args) => {
+  cy.appFactories([
+    ["create", factory, ...traits.split(", "), parseArgs(args)],
+  ]);
 });
 
 const login = (traits, args) => {

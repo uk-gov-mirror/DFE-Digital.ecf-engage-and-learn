@@ -7,10 +7,22 @@ const pagePaths = {
   start: "/",
   dashboard: "/dashboard",
   "edit username": "/username/edit",
+  "core induction programme index": "/core-induction-programmes",
+  "core induction programme year": "/core-induction-programmes/:id",
+  "core induction programme year edit": "/years/:id/edit",
+  "core induction programme module": "/modules/:id",
+  "core induction programme module edit": "/modules/:id/edit",
+  "core induction programme lesson": "/lessons/:id",
+  "core induction programme lesson edit": "/lessons/:id/edit",
 };
 
 Given("I am on {string} page", (page) => {
   const path = pagePaths[page];
+  cy.visit(path);
+});
+
+Given("I am on {string} page with id {string}", (page, id) => {
+  const path = pagePaths[page].replace(":id", id);
   cy.visit(path);
 });
 
@@ -31,10 +43,13 @@ const assertOnPage = (page) => {
     throw new Error(`Path not found for ${page}`);
   }
 
-  if (typeof path === "string") {
-    cy.location("pathname").should("equal", path);
+  if (path.includes(":id")) {
+    const pathRegex = new RegExp(
+      path.replace(/\//g, "\\/").replace(":id", "[^/]+")
+    );
+    cy.location("pathname").should("match", pathRegex);
   } else {
-    cy.location("pathname").should("match", path);
+    cy.location("pathname").should("equal", path);
   }
 };
 
