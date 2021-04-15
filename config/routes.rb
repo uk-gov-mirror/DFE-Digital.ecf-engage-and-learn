@@ -6,15 +6,6 @@ Rails.application.routes.draw do
     confirmations: "users/confirmations",
   }
 
-  devise_scope :user do
-    get "/users/confirm_sign_in", to: "users/sessions#redirect_from_magic_link"
-    post "/users/sign_in_with_token", to: "users/sessions#sign_in_with_token"
-    get "/users/new", to: "users/registrations#new"
-    post "/users/register", to: "users/registrations#create"
-    get "/users/information", to: "users/registrations#info"
-    post "/users/check-details", to: "users/registrations#check_details", as: :users_check_details
-  end
-
   get "check" => "application#check"
 
   resource :cookies, only: %i[show update]
