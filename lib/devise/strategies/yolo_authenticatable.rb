@@ -7,14 +7,12 @@ module Devise
     class YoloAuthenticatable < Authenticatable
       def authenticate!
         if params[:user].present?
-          user = User.find_by(email: params[:user][:email])
+          user = User.find_or_initialize_by(email: params[:user][:email])
 
-          if user.present?
-            success! user
-          else
-            errors.add :email, "Enter the email address your school used when they created your account"
-            fail! "This email address is not the same as the one your school used to create your account."
+          unless user.persisted?
+            user.errors.add :email, "Enter the email address your school used when they created your account"
           end
+          success! user
         end
       end
     end
