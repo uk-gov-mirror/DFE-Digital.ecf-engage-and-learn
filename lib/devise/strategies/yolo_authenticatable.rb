@@ -15,7 +15,6 @@ module Devise
             errors.add :email, "Enter the email address your school used when they created your account"
             fail! "This email address is not the same as the one your school used to create your account."
           end
-
         end
       end
     end
