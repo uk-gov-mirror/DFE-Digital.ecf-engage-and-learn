@@ -5,8 +5,15 @@ const elements = {
   "cookie banner": ".js-cookie-banner",
   "phase banner": ".govuk-phase-banner",
   "page body": "main",
+  "page heading": "h1",
+  link: "a",
+  button: "button,input[type=submit],input[type=button]",
   "edit username link": '[data-test="edit-username"]',
   "name input": '[name*="name"]',
+  "title input": '[name*="title"]',
+  "content input": '[name*="content"]',
+  "time input": '[name*="time"]',
+  "govspeak content": ".govuk-govspeak",
 };
 
 const get = (element) => cy.get(elements[element] || element);
