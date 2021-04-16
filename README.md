@@ -1,6 +1,6 @@
 ![Tests](https://github.com/DFE-Digital/ecf-engage-and-learn/workflows/Test/badge.svg)
 
-# Early careers framework
+# Engage and Learn
 
 ## Prerequisites
 
