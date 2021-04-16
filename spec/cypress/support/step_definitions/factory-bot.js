@@ -26,6 +26,10 @@ Given("{word} was created with {}", (factory, args) => {
   cy.appFactories([["create", factory, parseArgs(args)]]);
 });
 
+Given("{word} was created as {string}", (factory, traits) => {
+  cy.appFactories([["create", factory, ...traits.split(", ")]]);
+});
+
 Given("{word} was created as {string} with {}", (factory, traits, args) => {
   cy.appFactories([
     ["create", factory, ...traits.split(", "), parseArgs(args)],

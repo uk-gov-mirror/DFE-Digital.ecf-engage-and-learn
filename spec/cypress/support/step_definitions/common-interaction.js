@@ -14,6 +14,7 @@ const elements = {
   "content input": '[name*="content"]',
   "time input": '[name*="time"]',
   "govspeak content": ".govuk-govspeak",
+  "tag component": ".govuk-tag",
 };
 
 const get = (element) => cy.get(elements[element] || element);
@@ -76,6 +77,10 @@ Then("{string} should be hidden", (element) => {
 
 Then("{string} should not exist", (element) => {
   get(element).should("not.exist");
+});
+
+Then("{string} containing {string} should not exist", (element, text) => {
+  get(element).contains(text).should("not.exist");
 });
 
 Then("{string} label should be checked", (text) => {
