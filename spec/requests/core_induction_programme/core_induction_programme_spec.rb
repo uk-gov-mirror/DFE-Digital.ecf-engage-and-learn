@@ -53,18 +53,20 @@ RSpec.describe "Core Induction Programme", type: :request do
 
   describe "being a visitor" do
     it "raises an error trying to access core_induction_programme index page" do
-      expect { get "/core-induction-programmes" }.to raise_error Pundit::NotAuthorizedError
+      get "/core-induction-programmes"
+      expect(response).to redirect_to("/users/sign_in")
     end
 
     it "renders the core_induction_programme show page" do
-      expect { get "/core-induction-programmes/#{core_induction_programme.id}" }.to raise_error Pundit::NotAuthorizedError
+      get "/core-induction-programmes/#{core_induction_programme.id}"
+      expect(response).to redirect_to("/users/sign_in")
     end
   end
 
   describe "GET /download-export" do
     it "download export redirects to cip path when user is not admin" do
       get "/download-export"
-      expect(response).to redirect_to(cip_index_path)
+      expect(response).to redirect_to("/users/sign_in")
     end
 
     it "download export downloads a file when user is admin" do

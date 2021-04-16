@@ -5,10 +5,13 @@
       <%= f.govuk_error_summary %>
 
       <div class="govuk-form-group">
-        <%= f.govuk_email_field :email, label: { text: "Email address" } %>
+        <%= f.govuk_email_field(
+              :email,
+              label: { text: "Email address" },
+              hint: { text: "This is the email address your school used when they created your account" }) %>
       </div>
 
-      <%= f.govuk_submit "Sign in" %>
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>

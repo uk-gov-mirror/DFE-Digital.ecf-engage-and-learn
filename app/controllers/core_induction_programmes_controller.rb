@@ -4,6 +4,8 @@ class CoreInductionProgrammesController < ApplicationController
   include Pundit
   include CipBreadcrumbHelper
 
+  before_action :authenticate_user!
+
   def index
     authorize CoreInductionProgramme
     @core_induction_programmes = CoreInductionProgramme.all
