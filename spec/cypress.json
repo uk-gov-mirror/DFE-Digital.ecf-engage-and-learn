@@ -1,4 +1,5 @@
 {
   "baseUrl": "http://localhost:5017",
-  "testFiles": ["**/*.js", "**/*.feature"]
+  "testFiles": ["**/*.js", "**/*.feature"],
+  "blockHosts": ["*youtube.com", "*google-analytics.com"]
 }

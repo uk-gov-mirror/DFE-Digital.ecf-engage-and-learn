@@ -25,9 +25,9 @@ describe("Accessibility", () => {
   if (Cypress.env("tags")?.includes("checkCourseLessonsAccessibility")) {
     it("Visit all course lessons to check for accessibility", () => {
       cy.app("load_seed");
-      cy.appEval(`CourseLesson.all`).then((courseLessons) => {
-        cy.wrap(courseLessons).each((courseLesson) => {
-          cy.visitLesson(courseLesson);
+      cy.appEval(`CourseLessonPart.all`).then((lessonParts) => {
+        cy.wrap(lessonParts).each((part) => {
+          cy.visitLessonPart(part);
           cy.checkA11y();
         });
       });

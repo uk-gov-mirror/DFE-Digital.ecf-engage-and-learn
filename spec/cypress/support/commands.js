@@ -24,6 +24,11 @@ Cypress.Commands.add("visitLesson", (courseLesson) => {
   cy.get("h1").should("contain", courseLesson.title);
 });
 
+Cypress.Commands.add("visitLessonPart", (lessonPart) => {
+  cy.visit(`/lesson_parts/${lessonPart.id}`);
+  cy.get("h2").should("contain", lessonPart.title);
+});
+
 Cypress.Commands.add("visitModuleOfLesson", (courseLesson) => {
   cy.appEval(
     `CourseModule.find_by(id: "${courseLesson.course_module_id}")`
