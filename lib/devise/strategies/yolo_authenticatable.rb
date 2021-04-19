@@ -11,7 +11,7 @@ module Devise
 
           if user.blank?
             user = User.new
-            user.errors.add :email, "Enter the email address your school used when they created your account"
+            user.errors.add :email, "Enter the email address your school used when they registered your account"
           end
           success! user
         end

@@ -12,7 +12,7 @@ describe("Accessibility", () => {
     cy.get('[name="user[email]"]').type("doesntexist@example.com{enter}");
     cy.get(".govuk-error-summary").should(
       "contain",
-      "Enter the email address your school used when they created your account"
+      "Enter the email address your school used when they registered your account"
     );
     cy.checkA11y();
 
