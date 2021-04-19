@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     stored_location_for(user) || login_dashboard_path(user)
   end
 
+  def after_sign_out_path_for(_user)
+    signed_out_path
+  end
+
 protected
 
   def login_dashboard_path(user)

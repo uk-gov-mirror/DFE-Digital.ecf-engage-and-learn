@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     sessions: "users/sessions",
     confirmations: "users/confirmations",
   }
+  get "signed_out" => "signed_out#show"
 
   get "check" => "application#check"
 
