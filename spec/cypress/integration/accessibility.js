@@ -4,61 +4,6 @@ describe("Accessibility", () => {
     cy.checkA11y();
   });
 
-  it("Login should be accessible", () => {
-    cy.visit("/users/sign_in");
-    cy.checkA11y();
-
-    // School not registered page
-    cy.get('[name="user[email]"]').type("doesntexist@example.com{enter}");
-    cy.get(".govuk-error-summary").should(
-      "contain",
-      "Enter the email address your school used when they created your account"
-    );
-    cy.checkA11y();
-
-    cy.visit("/users/sign_in");
-    cy.checkA11y();
-
-    cy.appFactories([["create", "user", "early_career_teacher"]])
-      .as("userData")
-      .then(([user]) => {
-        cy.get('[name="user[email]"]').type(user.email);
-      });
-
-    cy.clickCommitButton();
-
-    cy.get("@userData").then(([user]) => {
-      cy.get("h1").should("contain", `Welcome ${user.full_name}`);
-    });
-
-    cy.checkA11y();
-  });
-
-  it("CIP should be accessible", () => {
-    cy.appFactories([["create", "core_induction_programme"]]);
-
-    cy.login("admin");
-
-    cy.visit("/core-induction-programmes");
-    cy.checkA11y();
-
-    cy.contains("Test Core induction programme").click();
-    cy.checkA11y();
-
-    cy.appFactories([["create", "course_lesson", "with_lesson_part"]]).as(
-      "courseLesson"
-    );
-    cy.get("@courseLesson").then(([lesson]) => {
-      cy.visitModuleOfLesson(lesson);
-
-      cy.contains("Test Course module").click();
-      cy.checkA11y();
-
-      cy.contains("Test Course lesson").click();
-      cy.checkA11y();
-    });
-  });
-
   it("Govspeak should be accessible", () => {
     cy.visit("/govspeak_test");
 

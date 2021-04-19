@@ -7,6 +7,7 @@ const pagePaths = {
   start: "/",
   dashboard: "/dashboard",
   "edit username": "/username/edit",
+  "sign in": "/users/sign_in",
   "core induction programme index": "/core-induction-programmes",
   "core induction programme year": "/core-induction-programmes/:id",
   "core induction programme year edit": "/years/:id/edit",
