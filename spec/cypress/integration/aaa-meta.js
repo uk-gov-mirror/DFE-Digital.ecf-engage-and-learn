@@ -12,7 +12,7 @@ describe("Meta test helper tests", () => {
     cy.url().should("contain", "/dashboard");
 
     cy.logout();
-    cy.get("#success-message").should("contain", "Signed out successfully.");
+    cy.get("main").should("contain", "You've signed out");
   });
 
   it("should have factory_bot helper functions", () => {
