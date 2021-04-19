@@ -15,6 +15,8 @@ const elements = {
   "time input": '[name*="time"]',
   "govspeak content": ".govuk-govspeak",
   "tag component": ".govuk-tag",
+  "service name in navigation": ".govuk-header__link--service-name",
+  "service navigation item": ".govuk-header__navigation-item",
 };
 
 const get = (element) => cy.get(elements[element] || element);
@@ -73,6 +75,14 @@ Then("{string} should not contain {string}", (element, value) => {
 
 Then("{string} should be hidden", (element) => {
   get(element).should("not.be.visible");
+});
+
+Then("{string} should exist", (element) => {
+  get(element).should("exist");
+});
+
+Then("{string} containing {string} should exist", (element, text) => {
+  get(element).contains(text).should("exist");
 });
 
 Then("{string} should not exist", (element) => {
