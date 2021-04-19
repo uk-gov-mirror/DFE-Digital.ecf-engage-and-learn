@@ -42,11 +42,10 @@
         </div>
 
         <div class="govuk-header__content">
-          <% if user_signed_in? && current_user.account_created %>
-            <%= govuk_link_to "Support for early career teachers", dashboard_path, class: "govuk-header__link govuk-header__link--service-name" %>
-          <% else %>
-            <%= govuk_link_to "Support for early career teachers", "/", class: "govuk-header__link govuk-header__link--service-name" %>
-          <% end %>
+          <%= govuk_link_to(
+            "Support for early career teachers",
+            user_signed_in? && current_user.account_created ? dashboard_path : "/",
+            class: "govuk-header__link govuk-header__link--service-name") %>
 
           <button type="button" role="button" data-module="govuk-button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
 
