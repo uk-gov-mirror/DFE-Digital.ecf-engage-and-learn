@@ -9,7 +9,7 @@ Cypress.Commands.add("login", (...traits) => {
 });
 
 Cypress.Commands.add("logout", () => {
-  cy.get("#navigation").contains("Logout").click();
+  cy.get("#navigation").contains("Sign out").click();
 
   cy.location("pathname").should("eq", "/signed_out");
 });

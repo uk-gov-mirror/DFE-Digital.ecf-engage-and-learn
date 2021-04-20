@@ -7,7 +7,7 @@ Feature: Login
 
     When I type "nope@example.com" into "email input"
     And I click the submit button
-    Then "error summary" should contain "Enter the email address your school used when they created your account"
+    Then "error summary" should contain "Enter the email address your school used when they registered your account"
     And the page should be accessible
 
     When I type "ect@example.com" into "email input"
