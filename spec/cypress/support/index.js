@@ -13,6 +13,8 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+import "@percy/cypress";
+
 import "./axe";
 import "./commands";
 import "./on-rails";

@@ -5,4 +5,5 @@ Feature: Start Page
     When I am on "start" page
     Then "phase banner" should contain "feedback"
     And the page should be accessible
+    And percy should be sent snapshot
 

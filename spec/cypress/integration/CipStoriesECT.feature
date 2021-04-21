@@ -26,6 +26,7 @@ Feature: ECT user interaction with Core Induction Programme
     When I click on "link" containing "Test Course lesson"
     And I click on "link" containing "Test Course module"
     Then "tag component" should contain "in progress"
+    And percy should be sent snapshot
 
     When I click on "link" containing "Test Course lesson"
     And I click on "There are sections that I don’t understand and would like to discuss with my mentor" label

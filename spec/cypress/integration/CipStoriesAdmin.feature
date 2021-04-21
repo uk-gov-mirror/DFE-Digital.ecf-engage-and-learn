@@ -12,6 +12,7 @@ Feature: Admin user interaction with Core Induction Programme
     When I click on "link" containing "Edit year content"
     Then I should be on "core induction programme year edit" page
     And the page should be accessible
+    And percy should be sent snapshot
 
     When I clear "title input"
     And I type "New test title" into "title input"
@@ -34,6 +35,7 @@ Feature: Admin user interaction with Core Induction Programme
     When I click on "link" containing "Edit module content"
     Then I should be on "core induction programme module edit" page
     And the page should be accessible
+    And percy should be sent snapshot
 
     When I clear "title input"
     And I type "New module title" into "title input"
@@ -56,6 +58,7 @@ Feature: Admin user interaction with Core Induction Programme
     When I click on "link" containing "Edit lesson"
     Then I should be on "core induction programme lesson edit" page
     And the page should be accessible
+    And percy should be sent snapshot called "edit lesson page"
 
     When I clear "title input"
     And I type "New lesson title" into "title input"
@@ -66,7 +69,10 @@ Feature: Admin user interaction with Core Induction Programme
     And "page body" should contain "Duration: 45 minutes"
 
     When I click on "link" containing "Edit lesson part"
-    And I clear "title input"
+    Then the page should be accessible
+    And percy should be sent snapshot called "edit lesson page"
+
+    When I clear "title input"
     And I type "Lesson part test title" into "title input"
     And I clear "content input"
     And I type "New content for lesson part" into "content input"

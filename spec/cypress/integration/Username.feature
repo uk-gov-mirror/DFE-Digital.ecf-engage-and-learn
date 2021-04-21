@@ -11,6 +11,8 @@ Feature: Changing username
 
     When I click on "edit username link"
     Then I should be on "edit username" page
+    And the page should be accessible
+    And percy should be sent snapshot
 
     When I type "Charlie" into "name input"
     And I click the submit button
