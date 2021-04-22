@@ -35,6 +35,10 @@ beforeEach(() => {
   cy.app("clean");
 });
 
+Cypress.on("after:run", () => {
+  cy.app("clean");
+});
+
 // comment this out if you do not want to attempt to log additional info on test fail
 Cypress.on("fail", (err, runnable) => {
   // allow app to generate additional logging data

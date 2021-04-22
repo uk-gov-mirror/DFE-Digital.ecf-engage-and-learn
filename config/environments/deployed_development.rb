@@ -40,7 +40,8 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
+  config.session_store :cookie_store, key: "_govuk_rails_boilerplate_session", secure: true, expire_after: 2.weeks
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.

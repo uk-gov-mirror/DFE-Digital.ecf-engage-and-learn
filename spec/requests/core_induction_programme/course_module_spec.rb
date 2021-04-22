@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "Core Induction Programme Module", type: :request do
   let(:course_module) { FactoryBot.create(:course_module) }
-  let(:course_module_url) { "/modules/#{course_module.id}" }
+  let(:course_module_path) { "/modules/#{course_module.id}" }
   let(:second_course_module) { FactoryBot.create(:course_module, title: "Second module title", previous_module: course_module) }
   let(:core_induction_programme) { FactoryBot.create(:core_induction_programme, course_year_one: course_module.course_year) }
 
@@ -55,21 +55,21 @@ RSpec.describe "Core Induction Programme Module", type: :request do
 
     describe "GET /modules/:id" do
       it "renders the cip module page" do
-        get course_module_url
+        get course_module_path
         expect(response).to render_template(:show)
       end
     end
 
     describe "GET /modules/:id/edit" do
       it "renders the cip module edit page" do
-        get "#{course_module_url}/edit"
+        get "#{course_module_path}/edit"
         expect(response).to render_template(:edit)
       end
     end
 
     describe "PUT /modules/:id" do
       it "renders a preview of changes to module" do
-        put course_module_url, params: { commit: "See preview", course_module: { content: "Extra content" } }
+        put course_module_path, params: { commit: "See preview", course_module: { content: "Extra content" } }
         expect(response).to render_template(:edit)
         expect(response.body).to include("Extra content")
         course_module.reload
@@ -77,22 +77,22 @@ RSpec.describe "Core Induction Programme Module", type: :request do
       end
 
       it "redirects to the module page when saving content" do
-        put course_module_url, params: { commit: "Save changes", course_module: { content: "Adding new content" } }
-        expect(response).to redirect_to(course_module_url)
-        get course_module_url
+        put course_module_path, params: { commit: "Save changes", course_module: { content: "Adding new content" } }
+        expect(response).to redirect_to(course_module_path)
+        get course_module_path
         expect(response.body).to include("Adding new content")
       end
 
       it "redirects to the module page when saving title" do
-        put course_module_url, params: { commit: "Save changes", course_module: { title: "New title", previous_module_id: "" } }
-        expect(response).to redirect_to(course_module_url)
-        get course_module_url
+        put course_module_path, params: { commit: "Save changes", course_module: { title: "New title", previous_module_id: "" } }
+        expect(response).to redirect_to(course_module_path)
+        get course_module_path
         expect(response.body).to include("New title")
       end
 
       it "reassigns an existing modules previous module id when moved" do
         third_course_module = FactoryBot.create(:course_module, title: "third module title", previous_module: second_course_module)
-        put course_module_url, params: { commit: "Save changes", course_module: { previous_module_id: third_course_module[:id] } }
+        put course_module_path, params: { commit: "Save changes", course_module: { previous_module_id: third_course_module[:id] } }
         course_module.reload
         expect(course_module[:previous_module_id]).to eql(third_course_module[:id])
       end
@@ -123,14 +123,14 @@ RSpec.describe "Core Induction Programme Module", type: :request do
 
     describe "GET /modules/:id" do
       it "renders the cip module page" do
-        get course_module_url
+        get course_module_path
         expect(response).to render_template(:show)
       end
     end
 
     describe "GET /modules/:id/edit" do
       it "raises an authorization error" do
-        expect { get "#{course_module_url}/edit" }.to raise_error Pundit::NotAuthorizedError
+        expect { get "#{course_module_path}/edit" }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
@@ -150,21 +150,21 @@ RSpec.describe "Core Induction Programme Module", type: :request do
   describe "when a non-user is accessing the module page" do
     describe "GET /modules/:id/" do
       it "renders the cip module page" do
-        get course_module_url
+        get course_module_path
         expect(response).to render_template(:show)
       end
     end
 
     describe "GET /modules/:id/edit" do
       it "redirects to the sign in page" do
-        get "#{course_module_url}/edit"
+        get "#{course_module_path}/edit"
         expect(response).to redirect_to("/users/sign_in")
       end
     end
 
     describe "PUT /modules/:id" do
       it "redirects to the sign in page" do
-        put course_module_url, params: { commit: "Save changes", course_module: { content: course_module.content } }
+        put course_module_path, params: { commit: "Save changes", course_module: { content: course_module.content } }
         expect(response).to redirect_to("/users/sign_in")
       end
     end

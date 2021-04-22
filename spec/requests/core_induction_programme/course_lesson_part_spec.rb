@@ -7,7 +7,7 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
   let(:course_lesson) { course_lesson_part.course_lesson }
   let(:course_module) { course_lesson.course_module }
   let(:course_year) { course_module.course_year }
-  let(:course_lesson_part_url) { "/lesson_parts/#{course_lesson_part.id}" }
+  let(:course_lesson_part_path) { "/lesson_parts/#{course_lesson_part.id}" }
 
   describe "when an admin user is logged in" do
     before do
@@ -17,21 +17,21 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
 
     describe "GET parts/:id" do
       it "renders the cip lesson part page" do
-        get course_lesson_part_url
+        get course_lesson_part_path
         expect(response).to render_template(:show)
       end
     end
 
     describe "GET /lesson_parts/:id/edit" do
       it "renders the cip lesson part edit page" do
-        get "#{course_lesson_part_url}/edit"
+        get "#{course_lesson_part_path}/edit"
         expect(response).to render_template(:edit)
       end
     end
 
     describe "PUT /lesson_parts/:id" do
       it "renders a preview of changes to lesson part" do
-        put course_lesson_part_url, params: { commit: "See preview", content: "Extra content" }
+        put course_lesson_part_path, params: { commit: "See preview", content: "Extra content" }
         expect(response).to render_template(:edit)
         expect(response.body).to include("Extra content")
         course_lesson_part.reload
@@ -39,23 +39,23 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
       end
 
       it "redirects to the lesson part page when saving content" do
-        put course_lesson_part_url, params: { commit: "Save changes", content: "Adding new content" }
-        expect(response).to redirect_to(course_lesson_part_url)
-        get course_lesson_part_url
+        put course_lesson_part_path, params: { commit: "Save changes", content: "Adding new content" }
+        expect(response).to redirect_to(course_lesson_part_path)
+        get course_lesson_part_path
         expect(response.body).to include("Adding new content")
       end
 
       it "redirects to the lesson part page when saving title" do
-        put course_lesson_part_url, params: { commit: "Save changes", title: "New title" }
-        expect(response).to redirect_to(course_lesson_part_url)
-        get course_lesson_part_url
+        put course_lesson_part_path, params: { commit: "Save changes", title: "New title" }
+        expect(response).to redirect_to(course_lesson_part_path)
+        get course_lesson_part_path
         expect(response.body).to include("New title")
       end
     end
 
     describe "DELETE /lesson_parts/:id" do
       it "deletes a course lesson part and redirects to a course lesson" do
-        post "#{course_lesson_part_url}/split", params: {
+        post "#{course_lesson_part_path}/split", params: {
           commit: "Save changes",
           split_lesson_part_form: {
             title: "Updated title one",
@@ -64,29 +64,29 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
             new_content: "Content two",
           },
         }
-        delete course_lesson_part_url, params: { id: course_lesson.course_lesson_parts[1].id }
+        delete course_lesson_part_path, params: { id: course_lesson.course_lesson_parts[1].id }
 
-        course_lesson_url = "/lessons/#{course_lesson.id}"
+        course_lesson_path = "/lessons/#{course_lesson.id}"
 
         expect(CourseLessonPart.count).to eq(1)
-        expect(response).to redirect_to(course_lesson_url)
+        expect(response).to redirect_to(course_lesson_path)
       end
 
       it "raises an authorization error when there is 1 course lesson part" do
-        expect { delete course_lesson_part_url, params: { id: course_lesson.course_lesson_parts[0].id } }.to raise_error Pundit::NotAuthorizedError
+        expect { delete course_lesson_part_path, params: { id: course_lesson.course_lesson_parts[0].id } }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
     describe "GET /lesson_parts/:id/split" do
       it "renders the cip lesson part split page" do
-        get "#{course_lesson_part_url}/split"
+        get "#{course_lesson_part_path}/split"
         expect(response).to render_template(:show_split)
       end
     end
 
     describe "POST /lesson_parts/:id/split" do
       it "renders a preview of changes to lesson part" do
-        post "#{course_lesson_part_url}/split", params: {
+        post "#{course_lesson_part_path}/split", params: {
           commit: "See preview",
           split_lesson_part_form: {
             title: "Updated title one",
@@ -107,7 +107,7 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
       end
 
       it "splits the lesson part and redirects to show" do
-        post "#{course_lesson_part_url}/split", params: {
+        post "#{course_lesson_part_path}/split", params: {
           commit: "Save changes",
           split_lesson_part_form: {
             title: "Updated title one",
@@ -116,7 +116,7 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
             new_content: "Content two",
           },
         }
-        expect(response).to redirect_to(course_lesson_part_url)
+        expect(response).to redirect_to(course_lesson_part_path)
 
         expect(CourseLessonPart.count).to eq(2)
         course_lesson_part.reload
@@ -125,7 +125,7 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
         expect(course_lesson_part.next_lesson_part.title).to eq "Title two"
         expect(course_lesson_part.next_lesson_part.content).to eq "Content two"
 
-        post "#{course_lesson_part_url}/split", params: {
+        post "#{course_lesson_part_path}/split", params: {
           commit: "Save changes",
           split_lesson_part_form: {
             title: "Updated title one again",
@@ -149,12 +149,12 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
     describe "GET /lesson_parts/:id/show_delete" do
       it "renders the cip lesson part show_delete page when there is > 1 course lesson part" do
         FactoryBot.create(:course_lesson_part, course_lesson: course_lesson)
-        get "#{course_lesson_part_url}/show_delete"
+        get "#{course_lesson_part_path}/show_delete"
         expect(response).to render_template(:show_delete)
       end
 
       it "raises an authorization error when there is 1 course lesson part" do
-        expect { get "#{course_lesson_part_url}/show_delete" }.to raise_error Pundit::NotAuthorizedError
+        expect { get "#{course_lesson_part_path}/show_delete" }.to raise_error Pundit::NotAuthorizedError
       end
     end
   end
@@ -167,38 +167,38 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
 
     describe "GET /lesson_parts/:id" do
       it "renders the cip lesson part page" do
-        get course_lesson_part_url
+        get course_lesson_part_path
         expect(response).to render_template(:show)
       end
     end
 
     describe "DELETE /lesson_parts/:id" do
       it "raises an authorization error" do
-        expect { delete course_lesson_part_url }.to raise_error Pundit::NotAuthorizedError
+        expect { delete course_lesson_part_path }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
     describe "GET /lesson_parts/:id/edit" do
       it "raises an authorization error" do
-        expect { get "#{course_lesson_part_url}/edit" }.to raise_error Pundit::NotAuthorizedError
+        expect { get "#{course_lesson_part_path}/edit" }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
     describe "GET /lesson_parts/:id/split" do
       it "raises an authorization error" do
-        expect { get "#{course_lesson_part_url}/split" }.to raise_error Pundit::NotAuthorizedError
+        expect { get "#{course_lesson_part_path}/split" }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
     describe "POST /lesson_parts/:id/split" do
       it "raises an authorization error" do
-        expect { post "#{course_lesson_part_url}/split" }.to raise_error Pundit::NotAuthorizedError
+        expect { post "#{course_lesson_part_path}/split" }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
     describe "GET /lesson_parts/:id/show_delete" do
       it "raises an authorization error" do
-        expect { get "#{course_lesson_part_url}/show_delete" }.to raise_error Pundit::NotAuthorizedError
+        expect { get "#{course_lesson_part_path}/show_delete" }.to raise_error Pundit::NotAuthorizedError
       end
     end
   end
@@ -206,49 +206,49 @@ RSpec.describe "Core Induction Programme Lesson Part", type: :request do
   describe "when a non-user is accessing the lesson part page" do
     describe "GET /lesson_parts/:id" do
       it "renders the cip lesson part page" do
-        get course_lesson_part_url
+        get course_lesson_part_path
         expect(response).to render_template(:show)
       end
     end
 
     describe "GET /lesson_parts/:id/edit" do
       it "redirects to the sign in page" do
-        get "#{course_lesson_part_url}/edit"
+        get "#{course_lesson_part_path}/edit"
         expect(response).to redirect_to("/users/sign_in")
       end
     end
 
     describe "PUT /lesson_parts/:id" do
       it "redirects to the sign in page" do
-        put course_lesson_part_url, params: { commit: "Save changes", content: course_lesson_part.content }
+        put course_lesson_part_path, params: { commit: "Save changes", content: course_lesson_part.content }
         expect(response).to redirect_to("/users/sign_in")
       end
     end
 
     describe "GET /lesson_parts/:id/split" do
       it "redirects to the sign in page" do
-        get "#{course_lesson_part_url}/split"
+        get "#{course_lesson_part_path}/split"
         expect(response).to redirect_to("/users/sign_in")
       end
     end
 
     describe "POST /lesson_parts/:id/split" do
       it "redirects to the sign in page" do
-        post "#{course_lesson_part_url}/split"
+        post "#{course_lesson_part_path}/split"
         expect(response).to redirect_to("/users/sign_in")
       end
     end
 
     describe "GET /lesson_parts/:id/show_delete" do
       it "redirects to the sign in page" do
-        get "#{course_lesson_part_url}/show_delete"
+        get "#{course_lesson_part_path}/show_delete"
         expect(response).to redirect_to("/users/sign_in")
       end
     end
 
     describe "DELETE /lesson_parts/:id" do
       it "redirects to the sign page" do
-        delete course_lesson_part_url
+        delete course_lesson_part_path
         expect(response).to redirect_to("/users/sign_in")
       end
     end
