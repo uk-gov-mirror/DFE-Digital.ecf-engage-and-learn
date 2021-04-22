@@ -49,7 +49,7 @@ Feature: Admin user interaction with Core Induction Programme
     Then "page body" should contain "Your changes have been saved"
     And "page body" should contain "New module title"
     And "page body" should contain "New test module content"
-    # And the page should be accessible
+    And the page should be accessible
 
   Scenario: Can edit lessons
     Given course_lesson was created as "with_lesson_part" with id "a4dc302c-ab71-4d7b-a10a-3116a778e8d5"
